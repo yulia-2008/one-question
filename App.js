@@ -3,22 +3,29 @@ import React, { useState} from 'react';
 import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
 
 export default function App() {
-  const [name, setName] = useState("Yulia")
-  const clickHandler = () => {
-    setName("Olga");
+  const [answer, setAnswer] = useState(" ")
+  const clickHandler = event => {
+    setAnswer(event.target.title);
+    console.log(event.target)
   }
   return (
     <View style={styles.container}>
-      <Text>My name is {name}</Text>
-      <View style={styles.test}>
-        <Button title="update name"  onPress = {clickHandler}/>
+      <View>
+        <Text>Question 1 ?</Text>
       </View>
-      <Text> Enter name:</Text>
+      <View style={styles.test}>
+        <Button title="variant 1"  onPress = {(event) => clickHandler(event)}/>
+      </View>
+      <View style={styles.test}>
+        <Button title="variant 2"  onPress = {clickHandler}/>
+      </View>
+
+      <Text> Your answer:</Text>
       <TextInput 
           style={styles.input}
           placehodle= "Enter your name"
           onChangeText={(val) => setName(val)}
-          keyboardType='numeric'/>
+          multiLine/>
       <StatusBar style="auto" />
     </View>
   );
@@ -34,6 +41,7 @@ const styles = StyleSheet.create({
   test: {
     backgroundColor: 'pink',
     padding: 20,
+    margin: 10,
   },
   input: {
     borderWidth: 1,
