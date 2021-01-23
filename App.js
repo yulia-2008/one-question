@@ -1,52 +1,66 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState} from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 
 export default function App() {
-  const [answer, setAnswer] = useState(" ")
-  const clickHandler = event => {
-    setAnswer(event.target.title);
-    console.log(event.target)
-  }
-  return (
-    <View style={styles.container}>
-      <View>
-        <Text>Question 1 ?</Text>
-      </View>
-      <View style={styles.test}>
-        <Button title="variant 1"  onPress = {(event) => clickHandler(event)}/>
-      </View>
-      <View style={styles.test}>
-        <Button title="variant 2"  onPress = {clickHandler}/>
-      </View>
+  const [tab, addTab] = useState(["first tab"])
+  const [tabName, setTabName] = useState("")
 
-      <Text> Your answer:</Text>
-      <TextInput 
-          style={styles.input}
-          placehodle= "Enter your name"
-          onChangeText={(val) => setName(val)}
-          multiLine/>
-      <StatusBar style="auto" />
-    </View>
+
+
+  const onchangeText = event => {
+    setTabName(event.target.title);  
+  }
+
+ const pressHandler = () => {
+   addTab(prev=>{ return [...prev, "added tab"]}) 
+ }
+
+ const clickHandler =()=>{
+   
+ }
+
+
+  
+  return (
+    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
+      <View style={styles.container}>
+        
+        {tab.map(tab=> {
+            return <TextInput style={styles.input} 
+                              onChangeText={text=>setTabName(text)}
+                              placeholder='enter tab name'
+                              onPress={clickHandler}
+                              multiline />
+        })}
+       
+
+        <TouchableOpacity onPress={pressHandler}>
+          <Text style={styles.button}>Add Tab</Text>
+        </TouchableOpacity>
+
+      </View>
+    </TouchableWithoutFeedback>
   );
-}
+  }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    // flex: 1,
+    marginTop: 30,
+    flexDirection: 'row',
+    backgroundColor: 'gray',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  test: {
-    backgroundColor: 'pink',
-    padding: 20,
-    margin: 10,
-  },
   input: {
+    marginTop: 5,
+    padding: 0,
+    backgroundColor: 'pink', 
     borderWidth: 1,
-    borderColor: 'red',
-    margin: 10,
-    width: 200,
+    textAlign: 'center'
+  },
+  button: {
+    backgroundColor: 'pink', 
   }
+  
 });
