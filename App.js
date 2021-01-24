@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function App() {
   const [tab, addTab] = useState(["first tab"])
@@ -24,6 +25,8 @@ export default function App() {
   return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
       <View style={styles.container}>
+      <AntDesign name="delete" size={24} color="black" />
+      
         
         {tab.map(tab=> {
             return <TextInput style={styles.input} 
