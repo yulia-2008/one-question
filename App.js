@@ -25,15 +25,19 @@ export default function App() {
   return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
       <View style={styles.container}>
-      <AntDesign name="delete" size={24} color="black" />
+      
       
         
         {tab.map(tab=> {
-            return <TextInput style={styles.input} 
+            return <View>
+            
+            <TextInput style={styles.input} 
                               onChangeText={text=>setTabName(text)}
                               placeholder='enter tab name'
                               onPress={clickHandler}
-                              multiline />
+                              multiline /> 
+                              <AntDesign name="delete" size={24} color="black" />
+                              </View>
         })}
        
 
