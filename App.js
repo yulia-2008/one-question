@@ -27,7 +27,7 @@ export default function App() {
       <View style={styles.container}>
       
       
-        
+        <ScrollView horizontal={true}>
         {tab.map(tab=> {
             return <View>
             
@@ -36,9 +36,10 @@ export default function App() {
                               placeholder='enter tab name'
                               onPress={clickHandler}
                               multiline /> 
-                              <AntDesign name="delete" size={24} color="black" />
-                              </View>
+            <AntDesign name="delete" size={24} color="black" />
+            </View>
         })}
+        </ScrollView>
        
 
         <TouchableOpacity onPress={pressHandler}>
