@@ -3,50 +3,74 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFe
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 
+
 export default function App() {
-  const [tab, addTab] = useState(["first tab"])
-  const [tabName, setTabName] = useState("")
+  const [memos, updateMemos] = useState([])
+  const [memoName, setMemoName] = useState("")
+  // const [bool, changeBool] = useState(true)
+
+  const [memoText, setText] = useState("")
 
 
-
-  const onchangeText = event => {
-    setTabName(event.target.title);  
-  }
+  // const onchangeText = event => {
+  //   setTabName(event.target.title);  
+  // }
 
  const pressHandler = () => {
-   addTab(prev=>{ return [...prev, "added tab"]}) 
+   let findKey = memos.length
+   updateMemos(prev => { return [
+      {name: "added memo", key: findKey+1}, ...prev
+    ]}) 
  }
 
- const clickHandler =()=>{
-   
+ const deleteHandler = key => {
+   console.log(key)
+    let filteredMemos = memos.filter(memo => memo.key != key)
+    updateMemos (prev => {return filteredMemos
+    })
  }
+
+//  const clickHandler =()=>{
+   
+//  }
 
 
   
   return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
       <View style={styles.container}>
-      
-      
-        <ScrollView horizontal={true}>
-        {tab.map(tab=> {
-            return <View style={styles.box}>
+        <View style={styles.head}>      
+          <ScrollView horizontal={true}>
+            {memos.map(memo=> {
+            return <View style={styles.inputBox} key={memo.key}>
+            <Text> {memo.name}</Text>
             
-            <TextInput style={styles.input} 
-                              onChangeText={text=>setTabName(text)}
-                              placeholder='enter tab name'
-                              onPress={clickHandler}
-                              multiline /> 
-            <AntDesign  name="delete" size={25} color="black" />
+            {/* <TextInput style={styles.input} 
+                              onSubmitEditing={text=>setMemoName(text)}
+                              placeholder=' memo name '
+                              
+                              />  */}
+            <TouchableOpacity  onPress={memo => {deleteHandler(memo.key)}}>
+            <AntDesign name="delete" size={25} color="black" />
+            </TouchableOpacity>
+
+            <AntDesign name="edit" size={24} color="black" />
             </View>
-        })}
-        </ScrollView>
-       
+            })}
+          </ScrollView>
 
-        <TouchableOpacity style={styles.button} onPress={pressHandler}>
+          <TouchableOpacity style={styles.button} onPress={pressHandler}>
             <Ionicons name="add" size={50} color="black" />
-        </TouchableOpacity>
+          </TouchableOpacity>
 
+        </View>
+
+        <View>
+        <TextInput style={styles.memo} 
+                   onChangeText={text=>setText(text)}
+                   placeholder=' type '
+                             /> 
+        </View>    
       </View>
     </TouchableWithoutFeedback>
   );
@@ -54,7 +78,10 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    // flex: 1,
+    flex:1,
+  },
+  head: {
+    // flex:1,
     marginTop: 30,
     flexDirection: 'row',
     backgroundColor: 'grey',
@@ -63,14 +90,15 @@ const styles = StyleSheet.create({
     padding: 0, 
   },
   input: {
-    margin: 0,
+    marginRight: 3,
     padding: 0,
     backgroundColor: 'white', 
     // borderWidth: 1,
     textAlign: 'center',
-    // borderRadius: 5 ,
+    borderRadius: 4,
+    fontWeight: 'bold',
   },
-  box: {
+  inputBox: {
     flex: 1,
     backgroundColor: '#D1D1D3', 
     borderWidth: 1,
