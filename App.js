@@ -54,38 +54,34 @@ const editHandler = memoforEditing => {
         <View style={styles.head}>      
           <ScrollView horizontal={true}>
             {memos.map(memo=> {
-            return <View style={styles.inputBox} key={memo.key}>
-            <Text> key: {memo.key}</Text>
-            <Text> title: {memo.title}</Text>
-            
-            {/* <TextInput style={styles.input} 
-                              onSubmitEditing={text=>setMemoName(text)}
-                              placeholder=' memo name '
-                              
-                              />  */}
-            <TouchableOpacity  onPress={arg => {deleteHandler(memo)}}>
-              <AntDesign name="delete" size={25} color="black" />
-            </TouchableOpacity>
-
-            <TouchableOpacity  onPress={arg => {editHandler(memo)}}>
-              <AntDesign name="edit" size={24} color="black" />
-            </TouchableOpacity>
-
-            </View>
+             return <TouchableOpacity style={styles.inputBox} key={memo.key}>
+                      <Text> key: {memo.key}</Text>
+                      <Text> title: {memo.title}</Text>           
+                      <AntDesign name="edit" size={24} color="black" 
+                                 onPress={arg => {editHandler(memo)}}/>            
+                      <AntDesign name="delete" size={25} color="black" 
+                                onPress={arg => {deleteHandler(memo)}}/>           
+                    </TouchableOpacity>
             })}
           </ScrollView>
-
-          <TouchableOpacity style={styles.button} onPress={addHandler}>
+          <TouchableOpacity style={styles.buttonAdd} onPress={addHandler}>
             <Ionicons name="add" size={50} color="black" />
-          </TouchableOpacity>
+          </TouchableOpacity> 
+                   
 
         </View>
 
         <View>
-        <TextInput style={styles.memo} 
-                   onChangeText={text=>setText(text)}
-                   placeholder=' type '
-                             /> 
+                   
+        
+
+        </View>  
+  
+        <View>
+          <TextInput style={styles.memo} 
+                    multiline = {true}
+                    onChangeText={text=>setText(text)}
+                    placeholder='  type... ' /> 
         </View>    
       </View>
     </TouchableWithoutFeedback>
@@ -123,11 +119,32 @@ const styles = StyleSheet.create({
     padding: 5,
     margin: 5,
   },
-  button: {
-    backgroundColor: 'grey', 
-    margin: 0, 
+  buttonAdd: {
+    backgroundColor: 'white',  
     padding: 0, 
     borderWidth: 1,
+    borderRadius: 7,
+    alignSelf: 'flex-end',
+  },
+  
+  // buttonDelete: {
+  //   backgroundColor: 'white', 
+  //   // margin: 0, 
+  //   padding: 12, 
+  //   borderWidth: 1,
+  //   alignSelf: 'flex-end',
+  //   borderRadius: 7,
+  // },
+
+  memo: {
+    padding: 15,
   }
   
 });
+
+ {/* <View style={styles.inputBox} key={memo.key}>
+             <TextInput style={styles.input} 
+                               onSubmitEditing={text=>setMemoName(text)}
+                               placeholder=' new memo  '
+                              
+                               /> */}
