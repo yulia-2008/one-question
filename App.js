@@ -6,21 +6,31 @@ import { Ionicons } from '@expo/vector-icons';
 
 export default function App() {
   const [memos, updateMemos] = useState([])
+  const [memo, setMemo] = useState({})
   const [memoName, setMemoName] = useState("")
   // const [bool, changeBool] = useState(true)
 
-  const [memoText, setText] = useState("")
+ 
+  const [memoBody, setText] = useState(` press  +  to create first memo `)
 
+  const renderMemo = memo => {
+    const foundMemo = memos.find(m => m.key === memo.key)
+    setText(foundMemo.body)
 
-  // const onchangeText = event => {
-  //   setTabName(event.target.title);  
-  // }
+  }
+
+const changeText = text => {
+//  setMemo(Object.assign(memo, {body: text}))
+setText(text)
+ console.log("k")
+}  
 
 const addHandler = () => {
-   let createKey = Math.floor(Math.random() * 100)
-   updateMemos(prev => { return [
-      {title: "new memo", key: createKey}, ...prev
+  let createKey = Math.floor(Math.random() * 100)
+  updateMemos(prev => { return [
+      {title: "new memo", key: createKey, body: "blank"}, ...prev
     ]}) 
+  setText("type ...")
 }
 
 const deleteHandler = memoForDeletion => {
@@ -47,7 +57,7 @@ const editHandler = memoforEditing => {
 }
 
 
-  
+
   return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
       <View style={styles.container}>
@@ -56,7 +66,9 @@ const editHandler = memoforEditing => {
             {memos.map(memo=> {
              return <TouchableOpacity style={styles.inputBox} key={memo.key}>
                       <Text> key: {memo.key}</Text>
-                      <Text> title: {memo.title}</Text>           
+                      <Text onPress={arg => {renderMemo(memo)}}> title: {memo.title} </Text>           
+                      
+                      
                       <AntDesign name="edit" size={24} color="black" 
                                  onPress={arg => {editHandler(memo)}}/>            
                       <AntDesign name="delete" size={25} color="black" 
@@ -67,21 +79,17 @@ const editHandler = memoforEditing => {
           <TouchableOpacity style={styles.buttonAdd} onPress={addHandler}>
             <Ionicons name="add" size={50} color="black" />
           </TouchableOpacity> 
-                   
-
-        </View>
+        </View> 
 
         <View>
-                   
-        
-
-        </View>  
-  
-        <View>
+           {/* <Text>{memoBody}</Text>  */}
           <TextInput style={styles.memo} 
                     multiline = {true}
-                    onChangeText={text=>setText(text)}
-                    placeholder='  type... ' /> 
+                    onChangeText={text=>changeText(text)}
+                    value={memoBody}
+                    // placeholder=' type...' 
+                    /> 
+                    
         </View>    
       </View>
     </TouchableWithoutFeedback>
