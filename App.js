@@ -41,10 +41,10 @@ const editHandler = memoforEditing => {
 }
 
 const editMemoBody = text => {
- let  foundMemo = memos.find(memo => memo.key === currentMemo.key)
+ let newMemos = [...memos]
+ let  foundMemo = newMemos.find(memo => memo.key === currentMemo.key)
  foundMemo.body = text
- updateMemos(prev => { return [...prev, foundMemo 
- ]}) 
+ updateMemos(newMemos)
 }
 
 
