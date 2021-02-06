@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 import CurrentMemo from './CurrentMemo.js'
@@ -7,14 +7,15 @@ import CurrentMemo from './CurrentMemo.js'
 
 export default function App() {
   const [memos, updateMemos] = useState([])
-  const [currentMemo, setCurrentMemo] = useState({})
+  const [currentMemo, setCurrentMemo] = useState(null)
   // const [memoName, setMemoName] = useState("")
 
 const addHandler = () => {
   let createKey = Math.floor(Math.random() * 100)
-  updateMemos(prev => { return [
-      {title: "new memo", key: createKey, body: "blank"}, ...prev
+  let newMemo = {title: "new memo", key: createKey, body: " type..."}
+  updateMemos(prev => { return [ newMemo, ...prev
     ]}) 
+  setCurrentMemo(newMemo)  
 }
 
 const deleteHandler = memoForDeletion => {
@@ -26,6 +27,7 @@ const deleteHandler = memoForDeletion => {
           onPress: ()=> {
             let filtered = memos.filter(memo => memo.key != memoForDeletion.key)
             updateMemos (filtered)
+            setCurrentMemo(null)
         }},
 
         { text: 'Cancel',  
@@ -49,18 +51,20 @@ const editMemoBody = text => {
 
 
   return (
-    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
+    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
-          <ScrollView horizontal={true}>
+          <ScrollView horizontal={true} >
             {memos.map(memo=> {
-             return <TouchableOpacity style={styles.memoTitle} key={memo.key}>
+             return <TouchableOpacity style={styles.memoTitle} key={memo.key} >
                       <Text> key: {memo.key}</Text>
                       <Text onPress={arg => {setCurrentMemo(memo)}}> title: {memo.title} </Text>                               
                       <AntDesign name="edit" size={24} color="black" 
-                                 onPress={arg => {editHandler(memo)}}/>            
+                                 onPress={arg => {editHandler(memo)}}/> 
+           <ScrollView  keyboardShouldPersistTaps='always' >
                       <AntDesign name="delete" size={25} color="black" 
-                                 onPress={arg => {deleteHandler(memo)}}/>           
+                                 onPress={arg => {deleteHandler(memo)}}/>  
+                            </ScrollView>             
                     </TouchableOpacity>
             })}
           </ScrollView>
@@ -69,7 +73,7 @@ const editMemoBody = text => {
           </TouchableOpacity> 
         </View> 
           
-        { memos.length >=1 ? 
+        { currentMemo !== null ? 
           <CurrentMemo memo = {currentMemo} edit={editMemoBody}/>
           : null
         }

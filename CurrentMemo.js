@@ -1,10 +1,11 @@
- import React from 'react';
-import { StyleSheet, TextInput, ScrollView, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, TextInput, ScrollView } from 'react-native';
 
 export default function CurrentMemo(props) {
    
     return ( 
-        <ScrollView keyboardShouldPersistTaps={true}>         
+        
+        <ScrollView>         
            <TextInput style={styles.input} 
                       multiline = {true}
                       onChangeText={text=>props.edit(text)}
