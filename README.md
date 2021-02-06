@@ -1,21 +1,16 @@
 Learning react native
 
-export default function App() {
-  const [name, setName] = useState("Yulia")
-  const clickHandler = () => {
-    setName("Olga");
-  }
 
-<View style={styles.container}>
-      <Text>My name is {name}</Text>
-      <View style={styles.test}>
-        <Button title="update name"  onPress = {clickHandler}/>
-      </View>
-      <Text> Enter name:</Text>
-      <TextInput 
-          style={styles.input}
-          placehodle= "Enter your name"
-          onChangeText={(val) => setName(val)}
-          keyboardType='numeric'/>
-      <StatusBar style="auto" />
-    </View>
+
+<!-- nestedScrollEnabled={true}
+keyboardShouldPersistTaps :
+This property is to determine the keyboard should visible after a tap or not. It is an enum value and accepts the following types :
+
+always, never, handled
+
+always : It will not dismiss the keyboard automatically. Only the children of the scrollview can detect taps, not the scrollview.
+handled: The keyboard will not dismiss automatically if the tap is handled by the children of the scrollview.
+never: This is the default option. It will dismiss the keyboard if you tap on outside of the focused text input. Note that children will not receive the tap event for this option
+
+
+ -->
