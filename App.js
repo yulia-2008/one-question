@@ -2,35 +2,19 @@ import React, { useState} from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
+import CurrentMemo from './CurrentMemo.js'
 
 
 export default function App() {
   const [memos, updateMemos] = useState([])
-  const [memo, setMemo] = useState({})
-  const [memoName, setMemoName] = useState("")
-  // const [bool, changeBool] = useState(true)
-
- 
-  const [memoBody, setText] = useState(` press  +  to create first memo `)
-
-  const renderMemo = memo => {
-    const foundMemo = memos.find(m => m.key === memo.key)
-    setText(foundMemo.body)
-
-  }
-
-const changeText = text => {
-//  setMemo(Object.assign(memo, {body: text}))
-setText(text)
- console.log("k")
-}  
+  const [currentMemo, setCurrentMemo] = useState({})
+  // const [memoName, setMemoName] = useState("")
 
 const addHandler = () => {
   let createKey = Math.floor(Math.random() * 100)
   updateMemos(prev => { return [
       {title: "new memo", key: createKey, body: "blank"}, ...prev
     ]}) 
-  setText("type ...")
 }
 
 const deleteHandler = memoForDeletion => {
@@ -56,6 +40,12 @@ const editHandler = memoforEditing => {
   // foundMemo.title
 }
 
+const editMemoBody = text => {
+ let  foundMemo = memos.find(memo => memo.key === currentMemo.key)
+ foundMemo.body = text
+ updateMemos(prev => { return [...prev, foundMemo 
+ ]}) 
+}
 
 
   return (
@@ -64,9 +54,9 @@ const editHandler = memoforEditing => {
         <View style={styles.head}>      
           <ScrollView horizontal={true}>
             {memos.map(memo=> {
-             return <TouchableOpacity style={styles.inputBox} key={memo.key}>
+             return <TouchableOpacity style={styles.memoTitle} key={memo.key}>
                       <Text> key: {memo.key}</Text>
-                      <Text onPress={arg => {renderMemo(memo)}}> title: {memo.title} </Text>           
+                      <Text onPress={arg => {setCurrentMemo(memo)}}> title: {memo.title} </Text>           
                       
                       
                       <AntDesign name="edit" size={24} color="black" 
@@ -81,16 +71,11 @@ const editHandler = memoforEditing => {
           </TouchableOpacity> 
         </View> 
 
-        <View>
-           {/* <Text>{memoBody}</Text>  */}
-          <TextInput style={styles.memo} 
-                    multiline = {true}
-                    onChangeText={text=>changeText(text)}
-                    value={memoBody}
-                    // placeholder=' type...' 
-                    /> 
+       
+          
+        { memos.length >=1 ? <CurrentMemo memo = {currentMemo} edit={editMemoBody}/> : null }          
                     
-        </View>    
+          
       </View>
     </TouchableWithoutFeedback>
   );
@@ -109,16 +94,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 0, 
   },
-  input: {
-    marginRight: 3,
-    padding: 0,
-    backgroundColor: 'white', 
-    // borderWidth: 1,
-    textAlign: 'center',
-    borderRadius: 4,
-    fontWeight: 'bold',
-  },
-  inputBox: {
+  memoTitle: {
     flex: 1,
     backgroundColor: '#D1D1D3', 
     borderWidth: 1,
@@ -134,25 +110,6 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     alignSelf: 'flex-end',
   },
-  
-  // buttonDelete: {
-  //   backgroundColor: 'white', 
-  //   // margin: 0, 
-  //   padding: 12, 
-  //   borderWidth: 1,
-  //   alignSelf: 'flex-end',
-  //   borderRadius: 7,
-  // },
-
-  memo: {
-    padding: 15,
-  }
-  
 });
 
- {/* <View style={styles.inputBox} key={memo.key}>
-             <TextInput style={styles.input} 
-                               onSubmitEditing={text=>setMemoName(text)}
-                               placeholder=' new memo  '
-                              
-                               /> */}
+ 
