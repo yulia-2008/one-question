@@ -25,7 +25,7 @@ const deleteHandler = memoForDeletion => {
         { text: "OK", 
           onPress: ()=> {
             let filtered = memos.filter(memo => memo.key != memoForDeletion.key)
-            updateMemos (prev => {return filtered})
+            updateMemos (filtered)
         }},
 
         { text: 'Cancel',  
@@ -35,7 +35,7 @@ const deleteHandler = memoForDeletion => {
   )        
 }
 
-const editHandler = memoforEditing => {
+const editMemoTitle = memoforEditing => {
   // foundMemo = memos.find(memo => memo.key === memoforEditing.key) 
   // foundMemo.title
 }
@@ -56,13 +56,11 @@ const editMemoBody = text => {
             {memos.map(memo=> {
              return <TouchableOpacity style={styles.memoTitle} key={memo.key}>
                       <Text> key: {memo.key}</Text>
-                      <Text onPress={arg => {setCurrentMemo(memo)}}> title: {memo.title} </Text>           
-                      
-                      
+                      <Text onPress={arg => {setCurrentMemo(memo)}}> title: {memo.title} </Text>                               
                       <AntDesign name="edit" size={24} color="black" 
                                  onPress={arg => {editHandler(memo)}}/>            
                       <AntDesign name="delete" size={25} color="black" 
-                                onPress={arg => {deleteHandler(memo)}}/>           
+                                 onPress={arg => {deleteHandler(memo)}}/>           
                     </TouchableOpacity>
             })}
           </ScrollView>
@@ -70,12 +68,12 @@ const editMemoBody = text => {
             <Ionicons name="add" size={50} color="black" />
           </TouchableOpacity> 
         </View> 
+          
+        { memos.length >=1 ? 
+          <CurrentMemo memo = {currentMemo} edit={editMemoBody}/>
+          : null
+        }
 
-       
-          
-        { memos.length >=1 ? <CurrentMemo memo = {currentMemo} edit={editMemoBody}/> : null }          
-                    
-          
       </View>
     </TouchableWithoutFeedback>
   );
@@ -83,7 +81,7 @@ const editMemoBody = text => {
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
   },
   head: {
     // flex:1,
