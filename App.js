@@ -1,4 +1,4 @@
-import React, { useState} from 'react';
+import React, { memo, useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
@@ -19,6 +19,7 @@ const addHandler = () => {
 }
 
 const deleteHandler = memoForDeletion => {
+  setCurrentMemo(memoForDeletion)
   Alert.alert(
      "Delete?", 
       `Delete "${memoForDeletion.title}" with all its content?`,
@@ -37,9 +38,14 @@ const deleteHandler = memoForDeletion => {
   )        
 }
 
-const editTitle = memoforEditing => {
+const renderCurrentMemo = memo => {
+  setCurrentMemo(memo)
+}
+
+const editTitle = memoForEditing => {
   // foundMemo = memos.find(memo => memo.key === memoforEditing.key) 
   // foundMemo.title
+  setCurrentMemo(memoForEditing)
 }
 
 const editMemoBody = text => {
@@ -58,11 +64,11 @@ const editMemoBody = text => {
             {memos.map(memo=> {
              return <TouchableOpacity style={styles.memoTitle} key={memo.key} >
                       <Text> key: {memo.key}</Text>
-                      <Text onPress={arg => {setCurrentMemo(memo)}}> title: {memo.title} </Text>                               
+                      <Text onPress={arg => {renderCurrentMemo(memo)}}> title: {memo.title} </Text>                               
                       <AntDesign name="edit" size={24} color="black" 
-                                 onPress={arg => {editTitle(memo), setCurrentMemo(memo)}}/>           
+                                 onPress={arg => {editTitle(memo)}}/>           
                       <AntDesign name="delete" size={25} color="black" 
-                                 onPress={arg => {deleteHandler(memo), setCurrentMemo(memo) }}/>                            
+                                 onPress={arg => {deleteHandler(memo)}}/>                            
                     </TouchableOpacity>
             })}
           </ScrollView>
