@@ -37,7 +37,7 @@ const deleteHandler = memoForDeletion => {
   )        
 }
 
-const editMemoTitle = memoforEditing => {
+const editTitle = memoforEditing => {
   // foundMemo = memos.find(memo => memo.key === memoforEditing.key) 
   // foundMemo.title
 }
@@ -54,20 +54,19 @@ const editMemoBody = text => {
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
-          <ScrollView horizontal={true} >
+          <ScrollView horizontal={true} keyboardShouldPersistTaps='always' >
             {memos.map(memo=> {
              return <TouchableOpacity style={styles.memoTitle} key={memo.key} >
                       <Text> key: {memo.key}</Text>
                       <Text onPress={arg => {setCurrentMemo(memo)}}> title: {memo.title} </Text>                               
                       <AntDesign name="edit" size={24} color="black" 
-                                 onPress={arg => {editHandler(memo)}}/> 
-           <ScrollView  keyboardShouldPersistTaps='always' >
+                                 onPress={arg => {editTitle(memo), setCurrentMemo(memo)}}/>           
                       <AntDesign name="delete" size={25} color="black" 
-                                 onPress={arg => {deleteHandler(memo)}}/>  
-                            </ScrollView>             
+                                 onPress={arg => {deleteHandler(memo), setCurrentMemo(memo) }}/>                            
                     </TouchableOpacity>
             })}
           </ScrollView>
+          
           <TouchableOpacity style={styles.buttonAdd} onPress={addHandler}>
             <Ionicons name="add" size={50} color="black" />
           </TouchableOpacity> 
@@ -105,6 +104,17 @@ const styles = StyleSheet.create({
     padding: 5,
     margin: 5,
   },
+  // clicked memoTitle: {
+  //   marginTop: 5,
+  //  marginLeft: 5,
+  //  marginRight: 5,}
+  // clicked head: {
+  // alignItems: 'flex-end',
+  // },
+  // box: {
+  //   marginBottom: 0,
+  //   paddingBottom: 0,
+  // },
   buttonAdd: {
     backgroundColor: 'white',  
     padding: 0, 
