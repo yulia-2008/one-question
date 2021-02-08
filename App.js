@@ -1,5 +1,5 @@
-import React, { memo, useState} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 import CurrentMemo from './CurrentMemo.js'
@@ -8,67 +8,80 @@ import CurrentMemo from './CurrentMemo.js'
 export default function App() {
   const [memos, updateMemos] = useState([])
   const [currentMemo, setCurrentMemo] = useState(null)
-  // const [memoName, setMemoName] = useState("")
+  const [editButtonClicked, changeValue] = useState(false)
 
-const addHandler = () => {
-  let createKey = Math.floor(Math.random() * 100)
-  let newMemo = {title: "new memo", key: createKey, body: " type..."}
-  updateMemos(prev => { return [ newMemo, ...prev
-    ]}) 
-  setCurrentMemo(newMemo)  
-}
+  const addHandler = () => {
+    let createKey = Math.floor(Math.random() * 100)
+    let newMemo = {title: "New Memo", key: createKey, body: " type..."}
+    updateMemos(prev => { return [ newMemo, ...prev
+      ]}) 
+    setCurrentMemo(newMemo)  
+  }
 
-const deleteHandler = memoForDeletion => {
-  setCurrentMemo(memoForDeletion)
-  Alert.alert(
-     "Delete?", 
-      `Delete "${memoForDeletion.title}" with all its content?`,
-      [
-        { text: "OK", 
-          onPress: ()=> {
-            let filtered = memos.filter(memo => memo.key != memoForDeletion.key)
-            updateMemos (filtered)
-            setCurrentMemo(null)
-        }},
+  const deleteHandler = memoForDeletion => {
+    setCurrentMemo(memoForDeletion)
+    Alert.alert(
+      "Delete?", 
+        `Delete "${memoForDeletion.title}" with all its content?`,
+        [
+          { text: "OK", 
+            onPress: ()=> {
+              let filtered = memos.filter(memo => memo.key != memoForDeletion.key)
+              updateMemos (filtered)
+              setCurrentMemo(null)
+          }},
 
-        { text: 'Cancel',  
-          onPress: () => console.log('Cancel Pressed')    
-        }
-      ] 
-  )        
-}
+          { text: 'Cancel',  
+            onPress: () => console.log('Cancel Pressed')    
+          }
+        ] 
+    )        
+  }
 
-const renderCurrentMemo = memo => {
-  setCurrentMemo(memo)
-}
+  const renderCurrentMemo = memo => {
+    changeValue(false)
+    setCurrentMemo(memo)
+  }
 
-const editTitle = memoForEditing => {
-  // foundMemo = memos.find(memo => memo.key === memoforEditing.key) 
-  // foundMemo.title
-  setCurrentMemo(memoForEditing)
-}
+  const editTitle = memoForEditing => {
+    setCurrentMemo(memoForEditing)
+    changeValue(true)
+  }
 
-const editMemoBody = text => {
- let newMemos = [...memos]
- let  foundMemo = newMemos.find(memo => memo.key === currentMemo.key)
- foundMemo.body = text
- updateMemos(newMemos)
-}
+  const editMemoBody = text => {
+  let newMemos = [...memos]
+  let  foundMemo = newMemos.find(memo => memo.key === currentMemo.key)
+  foundMemo.body = text
+  updateMemos(newMemos)
+  }
 
 
   return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
-          <ScrollView horizontal={true} keyboardShouldPersistTaps='always' >
+          <ScrollView horizontal={true} keyboardShouldPersistTaps='always' persistentScrollbar= {true} >
             {memos.map(memo=> {
-             return <TouchableOpacity style={styles.memoTitle} key={memo.key} >
-                      <Text> key: {memo.key}</Text>
-                      <Text onPress={arg => {renderCurrentMemo(memo)}}> title: {memo.title} </Text>                               
+             return <TouchableOpacity key={memo.key}
+                                      style={memos.length===1?  styles.currentTitleContainer:
+                                        currentMemo && currentMemo.key === memo.key ? 
+                                              styles.currentTitleContainer :
+                                              styles.titleContainer
+                                            }>
+                      {editButtonClicked && currentMemo.key === memo.key ?
+                          <TextInput autoFocus={true}
+                                    onEndEditing={()=> changeValue(false)}
+                                    onChangeText={text=>props.edit(text)}
+                                    placeholder="  type ...  "
+                          /> :
+                          <Text onPress={() => {renderCurrentMemo(memo)}}> {memo.title} </Text>                     
+                      }                               
                       <AntDesign name="edit" size={24} color="black" 
-                                 onPress={arg => {editTitle(memo)}}/>           
+                                 onPress={() => {editTitle(memo)
+                                 }}/>           
                       <AntDesign name="delete" size={25} color="black" 
-                                 onPress={arg => {deleteHandler(memo)}}/>                            
+                                 onPress={() => {deleteHandler(memo)
+                                 }}/>                            
                     </TouchableOpacity>
             })}
           </ScrollView>
@@ -95,13 +108,14 @@ const styles = StyleSheet.create({
   head: {
     // flex:1,
     marginTop: 30,
+    // paddingBottom: 9,
     flexDirection: 'row',
     backgroundColor: 'grey',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
-    padding: 0, 
+    // padding: 0, 
   },
-  memoTitle: {
+  titleContainer: {
     flex: 1,
     backgroundColor: '#D1D1D3', 
     borderWidth: 1,
@@ -109,6 +123,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row', 
     padding: 5,
     margin: 5,
+    alignItems: 'center',
+  },
+  currentTitleContainer:{
+    flex: 1,
+    backgroundColor: 'white', 
+    borderWidth: 1,
+    borderRadius: 7,
+    flexDirection: 'row', 
+    padding: 5,
+    margin: 0,
+    alignItems: 'center',
   },
   // clicked memoTitle: {
   //   marginTop: 5,

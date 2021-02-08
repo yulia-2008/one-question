@@ -8,6 +8,7 @@ export default function CurrentMemo(props) {
         <ScrollView>         
            <TextInput style={styles.input} 
                       multiline = {true}
+                      autoFocus={true}
                       onChangeText={text=>props.edit(text)}
                       value={props.memo.body}
                         // placeholder={props.memo.body}
