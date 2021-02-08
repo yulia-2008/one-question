@@ -43,9 +43,16 @@ export default function App() {
     setCurrentMemo(memo)
   }
 
-  const editTitle = memoForEditing => {
-    setCurrentMemo(memoForEditing)
+  const renderInput = memo => {
+    setCurrentMemo(memo)
     changeValue(true)
+  }
+
+  const editTitle = (text, memoForEditing) => {
+    let newMemos = [...memos]
+    let  foundMemo = newMemos.find(memo => memo.key === memoForEditing.key)
+    foundMemo.title = text
+    updateMemos(newMemos) 
   }
 
   const editMemoBody = text => {
@@ -63,21 +70,22 @@ export default function App() {
           <ScrollView horizontal={true} keyboardShouldPersistTaps='always' persistentScrollbar= {true} >
             {memos.map(memo=> {
              return <TouchableOpacity key={memo.key}
-                                      style={memos.length===1?  styles.currentTitleContainer:
-                                        currentMemo && currentMemo.key === memo.key ? 
-                                              styles.currentTitleContainer :
-                                              styles.titleContainer
+                                      style={memos.length === 1 ?  
+                                        styles.currentTitleContainer:
+                                          currentMemo && currentMemo.key === memo.key ? 
+                                            styles.currentTitleContainer :
+                                            styles.titleContainer
                                             }>
                       {editButtonClicked && currentMemo.key === memo.key ?
                           <TextInput autoFocus={true}
                                     onEndEditing={()=> changeValue(false)}
-                                    onChangeText={text=>props.edit(text)}
+                                    onChangeText={text=>editTitle(text, memo)}
                                     placeholder="  type ...  "
                           /> :
                           <Text onPress={() => {renderCurrentMemo(memo)}}> {memo.title} </Text>                     
                       }                               
                       <AntDesign name="edit" size={24} color="black" 
-                                 onPress={() => {editTitle(memo)
+                                 onPress={() => {renderInput(memo)
                                  }}/>           
                       <AntDesign name="delete" size={25} color="black" 
                                  onPress={() => {deleteHandler(memo)
