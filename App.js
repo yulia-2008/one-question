@@ -114,23 +114,20 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   head: {
-    // flex:1,
     marginTop: 30,
-    // paddingBottom: 9,
     flexDirection: 'row',
-    backgroundColor: 'grey',
+    backgroundColor: '#5F9EA0',
     alignItems: 'flex-end',
     justifyContent: 'center',
-    // padding: 0, 
   },
   titleContainer: {
     flex: 1,
-    backgroundColor: '#D1D1D3', 
+    backgroundColor: 'lightgrey',
     borderWidth: 1,
     borderRadius: 7,
     flexDirection: 'row', 
     padding: 5,
-    margin: 5,
+    margin: 10,
     alignItems: 'center',
   },
   currentTitleContainer:{
@@ -140,20 +137,9 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     flexDirection: 'row', 
     padding: 5,
-    margin: 0,
+    marginTop: 5,
     alignItems: 'center',
   },
-  // clicked memoTitle: {
-  //   marginTop: 5,
-  //  marginLeft: 5,
-  //  marginRight: 5,}
-  // clicked head: {
-  // alignItems: 'flex-end',
-  // },
-  // box: {
-  //   marginBottom: 0,
-  //   paddingBottom: 0,
-  // },
   buttonAdd: {
     backgroundColor: 'white',  
     padding: 0, 
