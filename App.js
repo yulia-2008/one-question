@@ -20,6 +20,7 @@ export default function App() {
     updateMemos(prev => { return [ newMemo, ...prev
       ]}) 
     setCurrentMemo(newMemo) 
+    
     // testing asyncStorage !!!
     
         AsyncStorage.setItem("key", "age")
