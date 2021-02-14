@@ -1,8 +1,12 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, TextInput, View,
+         TouchableOpacity, TouchableWithoutFeedback,
+         Keyboard, ScrollView, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 import CurrentMemo from './CurrentMemo.js'
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 
 export default function App() {
@@ -15,8 +19,27 @@ export default function App() {
     let newMemo = {title: "New Memo", key: createKey, body: " type..."}
     updateMemos(prev => { return [ newMemo, ...prev
       ]}) 
-    setCurrentMemo(newMemo)  
-  }
+    setCurrentMemo(newMemo) 
+    // testing asyncStorage !!!
+    
+        AsyncStorage.setItem("key", "age")
+        console.log('Data successfully saved')
+        console.log(AsyncStorage.getItem("key"))
+  }  
+        
+      
+// let getData = async () => {
+//     try {
+//         const value = AsyncStorage.getItem("key")
+//         .then(value => )
+//          console.log('Got data')
+//          console.log (value)
+//        } catch (e) {
+//          console.log('Failed to get')
+//        } 
+// }   
+  
+
 
   const deleteHandler = memoForDeletion => {
     setCurrentMemo(memoForDeletion)
@@ -63,11 +86,14 @@ export default function App() {
   }
 
 
+
   return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
-          <ScrollView horizontal={true} keyboardShouldPersistTaps='always' persistentScrollbar= {true} >
+          <ScrollView horizontal={true} 
+                      keyboardShouldPersistTaps='always' 
+                      persistentScrollbar= {true}>
             {memos.map(memo=> {
              return <TouchableOpacity key={memo.key}
                                       style={memos.length === 1 ?  
@@ -98,7 +124,7 @@ export default function App() {
             <Ionicons name="add" size={50} color="black" />
           </TouchableOpacity> 
         </View> 
-          
+        
         { currentMemo !== null ? 
           <CurrentMemo memo = {currentMemo} edit={editMemoBody}/>
           : null
