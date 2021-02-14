@@ -28,16 +28,16 @@ export default function App() {
   }  
         
       
-let getData = async () => {
-    try {
-        const value = AsyncStorage.getItem("key")
-        .then(value => )
-         console.log('Got data')
-         console.log (value)
-       } catch (e) {
-         console.log('Failed to get')
-       } 
-}   
+// let getData = async () => {
+//     try {
+//         const value = AsyncStorage.getItem("key")
+//         .then(value => )
+//          console.log('Got data')
+//          console.log (value)
+//        } catch (e) {
+//          console.log('Failed to get')
+//        } 
+// }   
   
 
 
