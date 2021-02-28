@@ -6,6 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 import CurrentMemo from './CurrentMemo.js'
 import AsyncStorage from '@react-native-community/async-storage';
+import { greaterThan } from 'react-native-reanimated';
 
 
 
@@ -23,9 +24,9 @@ export default function App() {
     
     // testing asyncStorage !!!
     
-        AsyncStorage.setItem("key", "age")
-        console.log('Data successfully saved')
-        console.log(AsyncStorage.getItem("key"))
+        // AsyncStorage.setItem("key", "age")
+        // console.log('Data successfully saved')
+        // console.log(AsyncStorage.getItem("key"))
   }  
         
       
@@ -109,15 +110,19 @@ export default function App() {
                                     onChangeText={text=>editTitle(text, memo)}
                                     placeholder="  type ...  "
                           /> :
-                          <Text onPress={() => {renderCurrentMemo(memo)}}> {memo.title} </Text>                     
-                      }                               
+                          <Text onPress={() => {renderCurrentMemo(memo)}}> {memo.title} </Text>                   
+                      }  
+                                           
                       <AntDesign name="edit" size={24} color="black" 
+                                style={styles.editButton}
                                  onPress={() => {renderInput(memo)
-                                 }}/>           
+                                 }}/>        
                       <AntDesign name="delete" size={25} color="black" 
                                  onPress={() => {deleteHandler(memo)
-                                 }}/>                            
+                                 }}/>   
+                                                         
                     </TouchableOpacity>
+                    
             })}
           </ScrollView>
           
@@ -153,7 +158,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 7,
     flexDirection: 'row', 
-    padding: 5,
+    paddingRight: 7, 
+    paddingLeft: 17,
+    paddingBottom: 7,
+    paddingTop: 7,
     margin: 10,
     alignItems: 'center',
   },
@@ -174,6 +182,11 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     alignSelf: 'flex-end',
   },
+  editButton: {
+    paddingLeft: 10,
+    paddingRight: 10, 
+  }
+  
 });
 
  
