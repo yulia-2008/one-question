@@ -12,7 +12,7 @@ import { greaterThan } from 'react-native-reanimated';
 
 export default function App() {
   
-
+  //  AsyncStorage.clear()
   // let getData = async () => {
   //   try {
   //       const value = await AsyncStorage.getItem('storedMemos')
@@ -52,8 +52,14 @@ let getData = async () =>  {
   useEffect(() => { AsyncStorage.setItem("storedMemos", JSON.stringify(memos))}, [memos, currentMemo])
 
   const addHandler = () => {
-    let createKey = Math.floor(Math.random() * 100)
-    let newMemo = {title: "New Memo", key: createKey, body: " type..."}
+    let newKey;
+    if (memos.length >= 1) {
+      let lastMemoKey = memos[0].key 
+      //  new memo is added to the front , that is why memo[0]   
+      newKey = lastMemoKey + 1
+    }
+    else {newKey = 0}
+    let newMemo = {title: "New Memo", key: newKey, body: " type..."}
     // memos.push(newMemo)
     // let updated = memos
     // updateMemos(updated)
@@ -113,7 +119,7 @@ let getData = async () =>  {
 
 
   return ( 
-    console.log("in returnn", memos),
+    console.log("in returnn", memos.length),
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
@@ -134,7 +140,7 @@ let getData = async () =>  {
                                     onChangeText={text=>editTitle(text, memo)}
                                     placeholder="  type ...  "
                           /> :
-                          <Text onPress={() => {renderCurrentMemo(memo)}}> {memo.title} </Text>                   
+                          <Text onPress={() => {renderCurrentMemo(memo)}}> {memo.title} key: {memo.key} </Text>                   
                       }  
                                            
                       <AntDesign name="edit" size={24} color="black" 
