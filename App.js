@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, TextInput, View,
          TouchableOpacity, TouchableWithoutFeedback,
          Keyboard, ScrollView, Alert } from 'react-native';
@@ -13,44 +13,53 @@ import { greaterThan } from 'react-native-reanimated';
 export default function App() {
   
 
-//   let getData = async () => {
-//     try {
-//         const value = AsyncStorage.getItem('storedMemos')
-//         .then(value => {data= value, console.log("in getData", data)})
-//        } catch (e) {
-//          console.log('Failed to get')
-//        } 
-// }   
+  // let getData = async () => {
+  //   try {
+  //       const value = await AsyncStorage.getItem('storedMemos')
+  //       .then(value => {return value})
+  //      } catch (e) {
+  //        console.log('Failed to get')
+  //      } 
+  // }   
+
+let getData = async () =>  {
+  await AsyncStorage.getItem('storedMemos')
+  .then(data => JSON.parse(data))
+  .then(value => { console.log("in getData",value), updateMemos(value)
+   })  
+}
+
+// function getData() {
+//   let data =  AsyncStorage.getItem('storedMemos') ;
+//   // let resp = await data;
+//   return data;
+// }
   
 //   let data;
 
-async componentDidMount() {
-  const response = await fetch(`https://api.coinmarketcap.com/v1/ticker/?limit=10`);
-  const json = await response.json();
-  this.setState({ data: json });
-}
-
-
+// async componentDidMount() {
+//   const response = await fetch(`https://api.coinmarketcap.com/v1/ticker/?limit=10`);
+//   const json = await response.json();
+//   this.setState({ data: json });
+// }
 
   const [memos, updateMemos] = useState([])
   const [currentMemo, setCurrentMemo] = useState(null)
   const [editButtonClicked, changeValue] = useState(false)
+  
+
+  useEffect(() => {getData()}, [])
+  useEffect(() => { AsyncStorage.setItem("storedMemos", JSON.stringify(memos))}, [memos, currentMemo])
 
   const addHandler = () => {
     let createKey = Math.floor(Math.random() * 100)
     let newMemo = {title: "New Memo", key: createKey, body: " type..."}
+    // memos.push(newMemo)
+    // let updated = memos
+    // updateMemos(updated)
     updateMemos(prev => { return [ newMemo, ...prev
       ]}) 
     setCurrentMemo(newMemo) 
-    
-    // testing asyncStorage !!!
-    
-        // AsyncStorage.setItem("key", "age")
-        // console.log('Data successfully saved')
-        // let gett =  AsyncStorage.getItem("storedMemos")
-        // let answer = JSON.parse( gett)
-        // console.log(AsyncStorage.getItem("storedMemos"))
-    //  getData()
   }  
         
       
@@ -92,8 +101,6 @@ async componentDidMount() {
     let  foundMemo = newMemos.find(memo => memo.key === memoForEditing.key)
     foundMemo.title = text
     updateMemos(newMemos) 
-    // AsyncStorage.setItem("storedMemos", JSON.stringify(newMemos))
-    
   }
 
   const editMemoBody = text => {
@@ -106,7 +113,7 @@ async componentDidMount() {
 
 
   return ( 
-    // console.log("in return", getData()),
+    console.log("in return", memos),
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
