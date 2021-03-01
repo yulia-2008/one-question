@@ -7,37 +7,35 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
 import CurrentMemo from './CurrentMemo.js'
 import AsyncStorage from '@react-native-community/async-storage';
-import { greaterThan } from 'react-native-reanimated';
-
 
 
 export default function App() {
   
-  //  AsyncStorage.clear() 
-
-let getData = async () =>  {
-  await AsyncStorage.getItem('storedMemos')
-  .then(data => JSON.parse(data))
-  .then(value => { console.log("in getData",value), updateMemos(value)
-   })  
-}
-
   const [memos, updateMemos] = useState([])
   const [currentMemo, setCurrentMemo] = useState(null)
-  const [editButtonClicked, changeValue] = useState(false)
+  const [editButtonClicked, clicked] = useState(false)
   
 
   useEffect(() => {getData()}, [])
   useEffect(() => { AsyncStorage.setItem("storedMemos", JSON.stringify(memos))}, [memos, currentMemo])
 
+  let getData = async () =>  {
+    await AsyncStorage.getItem('storedMemos')
+    .then(data => JSON.parse(data))
+    .then(value => { console.log("in getData",value), updateMemos(value)
+     })  
+  }
+
   const addHandler = () => {
     let newKey;
     if (memos.length >= 1) {
-      let lastMemoKey = memos[0].key 
-      //  new memo is added to the front , that is why memo[0]   
-      newKey = lastMemoKey + 1
+        let lastMemoKey = memos[0].key 
+        //  new memo is added to the front , that is why memo[0]   
+        newKey = lastMemoKey + 1
     }
-    else {newKey = 0}
+    else {
+      newKey = 0
+    }
 
     let newMemo = {title: "New Memo", key: newKey, body: " type..."}
     updateMemos(prev => { return [ newMemo, ...prev
@@ -66,16 +64,6 @@ let getData = async () =>  {
     )        
   }
 
-  const renderCurrentMemo = memo => {
-    changeValue(false)
-    setCurrentMemo(memo)
-  }
-
-  const renderInput = memo => {
-    setCurrentMemo(memo)
-    changeValue(true)
-  }
-
   const editTitle = (text, memoForEditing) => {
     let newMemos = [...memos]
     let  foundMemo = newMemos.find(memo => memo.key === memoForEditing.key)
@@ -84,13 +72,11 @@ let getData = async () =>  {
   }
 
   const editMemoBody = text => {
-  let newMemos = [...memos]
-  let  foundMemo = newMemos.find(memo => memo.key === currentMemo.key)
-  foundMemo.body = text
-  updateMemos(newMemos)
+    let newMemos = [...memos]
+    let  foundMemo = newMemos.find(memo => memo.key === currentMemo.key)
+    foundMemo.body = text
+    updateMemos(newMemos)
   }
-
-
 
   return ( 
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
@@ -109,12 +95,12 @@ let getData = async () =>  {
                                       }>
                       {editButtonClicked && currentMemo.key === memo.key ?
                           <TextInput autoFocus={true}
-                                    onEndEditing={()=> changeValue(false)}
+                                    onEndEditing={()=> clicked(false)}
                                     onChangeText={text=>editTitle(text, memo)}
                                     placeholder="  type ...  " />
                           :
                           <Text style={styles.title}
-                                onPress={() => {renderCurrentMemo(memo)} }>
+                                onPress={() => {setCurrentMemo(memo)} }>
                                {memo.title} </Text>                   
                       }  
 
@@ -122,7 +108,7 @@ let getData = async () =>  {
                         <View >                                 
                             <FontAwesome  name="edit" size={25} 
                                           color="black" style={styles.editButton}
-                                          onPress={() => {renderInput(memo)
+                                          onPress={() => {clicked(true)
                                           }} />                                                       
                             <AntDesign  name="delete" size={25} color="black" 
                                         style={styles.deleteButton}
