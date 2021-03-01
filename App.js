@@ -113,7 +113,7 @@ let getData = async () =>  {
 
 
   return ( 
-    console.log("in return", memos),
+    console.log("in returnn", memos),
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
