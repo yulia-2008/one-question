@@ -10,7 +10,27 @@ import { greaterThan } from 'react-native-reanimated';
 
 
 
-export default function App() {
+// export default function App() {
+  class App extends Component {
+
+//   let getData = async () => {
+//     try {
+//         const value = AsyncStorage.getItem('storedMemos')
+//         .then(value => {data= value, console.log("in getData", data)})
+//        } catch (e) {
+//          console.log('Failed to get')
+//        } 
+// }   
+  
+//   let data;
+
+async componentDidMount() {
+  const response = await fetch(`https://api.coinmarketcap.com/v1/ticker/?limit=10`);
+  const json = await response.json();
+  this.setState({ data: json });
+}
+
+
   const [memos, updateMemos] = useState([])
   const [currentMemo, setCurrentMemo] = useState(null)
   const [editButtonClicked, changeValue] = useState(false)
@@ -26,21 +46,14 @@ export default function App() {
     
         // AsyncStorage.setItem("key", "age")
         // console.log('Data successfully saved')
-        // console.log(AsyncStorage.getItem("key"))
+        // let gett =  AsyncStorage.getItem("storedMemos")
+        // let answer = JSON.parse( gett)
+        // console.log(AsyncStorage.getItem("storedMemos"))
+    //  getData()
   }  
         
       
-// let getData = async () => {
-//     try {
-//         const value = AsyncStorage.getItem("key")
-//         .then(value => )
-//          console.log('Got data')
-//          console.log (value)
-//        } catch (e) {
-//          console.log('Failed to get')
-//        } 
-// }   
-  
+
 
 
   const deleteHandler = memoForDeletion => {
@@ -78,6 +91,8 @@ export default function App() {
     let  foundMemo = newMemos.find(memo => memo.key === memoForEditing.key)
     foundMemo.title = text
     updateMemos(newMemos) 
+    // AsyncStorage.setItem("storedMemos", JSON.stringify(newMemos))
+    
   }
 
   const editMemoBody = text => {
@@ -88,8 +103,9 @@ export default function App() {
   }
 
 
-
-  return (
+render () {
+  return ( 
+    // console.log("in return", getData()),
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
@@ -127,7 +143,7 @@ export default function App() {
           </ScrollView>
           
           <TouchableOpacity style={styles.buttonAdd} onPress={addHandler}>
-            <Ionicons name="add" size={50} color="black" />
+            <Ionicons name="add" size={40} color="black" />
           </TouchableOpacity> 
         </View> 
         
@@ -138,8 +154,10 @@ export default function App() {
 
       </View>
     </TouchableWithoutFeedback>
-  );
-  }
+  )}
+}
+
+  export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -159,7 +177,7 @@ const styles = StyleSheet.create({
     borderRadius: 7,
     flexDirection: 'row', 
     paddingRight: 7, 
-    paddingLeft: 17,
+    paddingLeft: 10,
     paddingBottom: 7,
     paddingTop: 7,
     margin: 10,
@@ -176,11 +194,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonAdd: {
-    backgroundColor: 'white',  
+    borderColor: "black",
+    backgroundColor: 'lightgrey',  
     padding: 0, 
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 7,
-    alignSelf: 'flex-end',
+    alignSelf: 'center',
+    marginLeft: 10,
   },
   editButton: {
     paddingLeft: 10,
