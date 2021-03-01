@@ -10,8 +10,8 @@ import { greaterThan } from 'react-native-reanimated';
 
 
 
-// export default function App() {
-  class App extends Component {
+export default function App() {
+  
 
 //   let getData = async () => {
 //     try {
@@ -29,6 +29,7 @@ async componentDidMount() {
   const json = await response.json();
   this.setState({ data: json });
 }
+
 
 
   const [memos, updateMemos] = useState([])
@@ -103,7 +104,7 @@ async componentDidMount() {
   }
 
 
-render () {
+
   return ( 
     // console.log("in return", getData()),
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
@@ -154,10 +155,8 @@ render () {
 
       </View>
     </TouchableWithoutFeedback>
-  )}
-}
-
-  export default App;
+  );
+  }
 
 const styles = StyleSheet.create({
   container: {
