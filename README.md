@@ -17,6 +17,6 @@ Simple note organizer & memo pad for android. </p>
 
 - Used Expo for simplifying the development and testing.
 
-- Integrated EXPO icons
+- Integrated EXPO icons.
 
 

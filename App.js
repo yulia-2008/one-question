@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, memo} from 'react';
 import { StyleSheet, Text, TextInput, View,
          TouchableOpacity, TouchableWithoutFeedback,
          Keyboard, ScrollView, Alert } from 'react-native';
@@ -14,6 +14,7 @@ export default function App() {
   const [memos, updateMemos] = useState([])
   const [currentMemo, setCurrentMemo] = useState(null)
   const [editButtonClicked, clicked] = useState(false)
+  const ref = React.useRef(null);
   
 
   useEffect(() => {getData()}, [])
@@ -22,14 +23,15 @@ export default function App() {
   let getData = async () =>  {
     await AsyncStorage.getItem('storedMemos')
     .then(data => JSON.parse(data))
-    .then(value => { console.log("in getData",value), updateMemos(value)
-     })  
+    .then(value => {updateMemos(value)
+    })  
   }
 
   const addHandler = () => {
     let newKey;
     if (memos.length >= 1) {
-        let lastMemoKey = memos[0].key 
+         let lastMemoKey = memos[0].key 
+        // let lastMemoKey = memos[memo.length-1].key 
         //  new memo is added to the front , that is why memo[0]   
         newKey = lastMemoKey + 1
     }
@@ -40,7 +42,11 @@ export default function App() {
     let newMemo = {title: "New Memo", key: newKey, body: " type..."}
     updateMemos(prev => { return [ newMemo, ...prev
       ]}) 
+    // updateMemos(prev => { return [ ...prev, newMemo 
+    //    ]}) 
     setCurrentMemo(newMemo) 
+    ref.current.scrollTo({x: 1, animated: true, duration: 10})
+    console.log(ref.current)
   }  
         
 
@@ -82,7 +88,9 @@ export default function App() {
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
       <View style={styles.container}>
         <View style={styles.head}>      
-          <ScrollView horizontal={true} 
+          <ScrollView  ref={ref}
+                      // onContentSizeChange={() => {ref.current.scrollTo({x:1000, animated: true, duration: 10})}}
+                      horizontal={true} 
                       keyboardShouldPersistTaps='always' 
                       persistentScrollbar= {true}>
             {memos.map(memo=> {
