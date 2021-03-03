@@ -1,5 +1,5 @@
-import React, {useState, useEffect, memo} from 'react';
-import { StyleSheet, Text, TextInput, View,
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, Text, TextInput, View, Image,
          TouchableOpacity, TouchableWithoutFeedback,
          Keyboard, ScrollView, Alert } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons'; 
 import CurrentMemo from './CurrentMemo.js'
 import AsyncStorage from '@react-native-community/async-storage';
+import Image1 from './Image1.jpg'
 
 
 export default function App() {
@@ -150,7 +151,7 @@ export default function App() {
           { memos.length === 1 && currentMemo === null || currentMemo && currentMemo !== false ? 
             <CurrentMemo memo = {memos.length === 1 && currentMemo === null ? memos[0] : currentMemo } 
                          edit={editMemoBody} />
-            : null
+            : <Image style={styles.image} source = {Image1}/>
           }
         </View>
       </View>
@@ -165,7 +166,8 @@ const styles = StyleSheet.create({
   head: {
     marginTop: 30,
     flexDirection: 'row',
-    backgroundColor: '#5F9EA0',
+    // backgroundColor: '#5F9EA0',
+    backgroundColor: "rgb(105, 190, 186)",
     alignItems: 'flex-end',
     justifyContent: 'center',
   },
@@ -219,7 +221,13 @@ const styles = StyleSheet.create({
   memoBodyContainer: {
     flex: 1,
     borderWidth: 1,
-    backgroundColor: '#5F9EA0',
+    backgroundColor: 'rgb(105, 190, 186)',
+  }, 
+  image: {
+    width: 300,
+    height: 350,
+    alignSelf: 'center',
+    margin: 50,
   }
 });
 
