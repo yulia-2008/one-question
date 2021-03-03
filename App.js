@@ -13,6 +13,8 @@ export default function App() {
   
   const [memos, updateMemos] = useState([])
   const [currentMemo, setCurrentMemo] = useState(null)
+     // currentMemo is null when open the app
+     // currentMemo is false when delete the memo ot click outside of memo.
   const [editButtonClicked, clicked] = useState(false)
   const ref = React.useRef(null);
   
@@ -31,8 +33,9 @@ export default function App() {
     let newKey;
     if (memos.length >= 1) {
          let lastMemoKey = memos[0].key 
-        // let lastMemoKey = memos[memo.length-1].key 
-        //  new memo is added to the front , that is why memo[0]   
+        //  new memo is added to the front , that is why memo[0] 
+        // if needed to change for adding new memo to the end, use this: 
+        // let lastMemoKey = memos[memo.length-1].key   
         newKey = lastMemoKey + 1
     }
     else {
@@ -42,16 +45,15 @@ export default function App() {
     let newMemo = {title: "New Memo", key: newKey, body: " type..."}
     updateMemos(prev => { return [ newMemo, ...prev
       ]}) 
+    // if needed to change for adding new memo to the end, use this: 
     // updateMemos(prev => { return [ ...prev, newMemo 
     //    ]}) 
     setCurrentMemo(newMemo) 
-    ref.current.scrollTo({x: 1, animated: true, duration: 10})
-    console.log(ref.current)
+    ref.current.scrollTo({x: 1, animated: true})
   }  
         
 
   const deleteHandler = memoForDeletion => {
-    setCurrentMemo(memoForDeletion)
     Alert.alert(
       "Delete?", 
         `Delete "${memoForDeletion.title}" with all its content?`,
@@ -59,15 +61,22 @@ export default function App() {
           { text: "OK", 
             onPress: ()=> {
               let filtered = memos.filter(memo => memo.key != memoForDeletion.key)
+              // if the last memo left after deletion, last memo displays as current:
+              // if(filtered.length === 1){
+              //   setCurrentMemo(filtered[0])
+              // }
+              // else {
+              // setCurrentMemo(null)
+              // }
+              setCurrentMemo(false)
               updateMemos (filtered)
-              setCurrentMemo(null)
           }},
 
           { text: 'Cancel',  
             onPress: () => console.log('Cancel Pressed')    
           }
         ] 
-    )        
+    )      
   }
 
   const editTitle = (text, memoForEditing) => {
@@ -85,21 +94,20 @@ export default function App() {
   }
 
   return ( 
-    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()}}>
+    <TouchableWithoutFeedback onPress={()=>{setCurrentMemo(false), Keyboard.dismiss()} }>
       <View style={styles.container}>
         <View style={styles.head}>      
           <ScrollView  ref={ref}
-                      // onContentSizeChange={() => {ref.current.scrollTo({x:1000, animated: true, duration: 10})}}
                       horizontal={true} 
                       keyboardShouldPersistTaps='always' 
                       persistentScrollbar= {true}>
             {memos.map(memo=> {
              return <TouchableOpacity key={memo.key}
-                                      style={memos.length === 1 ?  
+                                      // open app with only 1 memo - desplay it as current memo 
+                                      // but if you have 2 memos and delete one of them, the last memo does not display as current, it will be false (not null)
+                                      style={ memos.length === 1 && currentMemo === null || currentMemo && currentMemo.key === memo.key ?  
                                         styles.currentTitleContainer :
-                                        currentMemo && currentMemo.key === memo.key ? 
-                                            styles.currentTitleContainer :
-                                            styles.titleContainer
+                                        styles.titleContainer
                                       }>
                       {editButtonClicked && currentMemo.key === memo.key ?
                           <TextInput autoFocus={true}
@@ -112,7 +120,7 @@ export default function App() {
                                {memo.title} </Text>                   
                       }  
 
-                      { memos.length === 1 || currentMemo && currentMemo.key === memo.key ? 
+                      {memos.length === 1 && currentMemo === null || currentMemo && currentMemo.key === memo.key ? 
                         <View >                                 
                             <FontAwesome  name="edit" size={25} 
                                           color="black" style={styles.editButton}
@@ -136,11 +144,15 @@ export default function App() {
           </TouchableOpacity> 
         </View> 
         
-        { currentMemo !== null ? 
-          <CurrentMemo memo = {currentMemo} edit={editMemoBody}/>
-          : null
-        }
-
+        <View style={styles.memoBodyContainer}>
+           {/* open app with only 1 memo - desplay it as current memo
+            but if you have 2 memos and delete one of them, the last memo does not display as current, it will be false (not null) */}
+          { memos.length === 1 && currentMemo === null || currentMemo && currentMemo !== false ? 
+            <CurrentMemo memo = {memos.length === 1 && currentMemo === null ? memos[0] : currentMemo } 
+                         edit={editMemoBody} />
+            : null
+          }
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
@@ -194,7 +206,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 7,
     alignSelf: 'center',
-    marginLeft: 15,
+    margin: 15,
   },
   editButton: {
     paddingLeft: 10, 
@@ -204,6 +216,11 @@ const styles = StyleSheet.create({
     paddingTop: 3,
     paddingLeft: 7,
   }, 
+  memoBodyContainer: {
+    flex: 1,
+    borderWidth: 1,
+    backgroundColor: '#5F9EA0',
+  }
 });
 
  

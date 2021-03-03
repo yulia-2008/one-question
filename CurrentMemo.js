@@ -6,7 +6,7 @@ export default function CurrentMemo(props) {
    
     return ( 
         
-        <ScrollView>         
+        <ScrollView style={styles.currentMemoBodyContainer}>         
            <TextInput style={styles.input} 
                       multiline = {true}
                       autoFocus={true}
@@ -21,5 +21,8 @@ export default function CurrentMemo(props) {
   const styles = StyleSheet.create({
     input: {
       padding: 15,
+    },
+    currentMemoBodyContainer: {
+      backgroundColor: 'white',
     } 
   });
