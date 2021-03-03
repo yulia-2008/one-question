@@ -11,7 +11,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c5578747-567f-4380-8959-f6856a4252ee" name="Default Changelist" comment="test">
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,25 +143,29 @@
     <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1610496649179">
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1614809347341">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1610496649179" />
-    <state x="484" y="0" key="#question" timestamp="1610650312997">
+    <state x="223" y="67" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824@0.0.1536.824" timestamp="1614809347341" />
+    <state x="484" y="0" key="#question" timestamp="1614810154395">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="484" y="0" key="#question/0.0.1536.824@0.0.1536.824" timestamp="1610650312997" />
-    <state x="54" y="111" width="1200" height="584" key="AVDManager" timestamp="1614808232378">
+    <state x="484" y="0" key="#question/0.0.1536.824@0.0.1536.824" timestamp="1614810154395" />
+    <state x="54" y="111" width="1200" height="584" key="AVDManager" timestamp="1614810158999">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="54" y="111" width="1200" height="584" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1614808232378" />
+    <state x="54" y="111" width="1200" height="584" key="AVDManager/0.0.1536.824@0.0.1536.824" timestamp="1614810158999" />
     <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1610650074054">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1610650074054" />
-    <state x="555" y="0" key="SettingsEditor" timestamp="1614535829813">
+    <state x="555" y="0" key="SettingsEditor" timestamp="1614809096868">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="555" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1614535829813" />
+    <state x="555" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1614809096868" />
+    <state x="461" y="108" key="run.anything.popup" timestamp="1614809027723">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="461" y="108" key="run.anything.popup/0.0.1536.824@0.0.1536.824" timestamp="1614809027723" />
   </component>
 </project>

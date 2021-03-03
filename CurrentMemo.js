@@ -24,5 +24,7 @@ export default function CurrentMemo(props) {
     },
     currentMemoBodyContainer: {
       backgroundColor: 'white',
+      borderWidth: 10,
+      borderColor: 'rgb(184, 231, 228)',
     } 
   });
