@@ -8,6 +8,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import CurrentMemo from './CurrentMemo.js'
 import AsyncStorage from '@react-native-community/async-storage';
 import Image1 from './Image1.jpg'
+import Image2 from './Image2.png'
 
 
 export default function App() {
@@ -151,7 +152,7 @@ export default function App() {
           { memos.length === 1 && currentMemo === null || currentMemo && currentMemo !== false ? 
             <CurrentMemo memo = {memos.length === 1 && currentMemo === null ? memos[0] : currentMemo } 
                          edit={editMemoBody} />
-            : <Image style={styles.image} source = {Image1}/>
+            : <Image style={styles.image} source = {Image2}/>
           }
         </View>
       </View>
