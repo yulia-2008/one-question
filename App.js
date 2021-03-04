@@ -5,7 +5,8 @@ import { StyleSheet, Text, TextInput, View, Image,
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 import { FontAwesome } from '@expo/vector-icons'; 
-import CurrentMemo from './CurrentMemo.js'
+import CurrentMemo from './CurrentMemo.js';
+import Themes from './Themes.js';
 import AsyncStorage from '@react-native-community/async-storage';
 import Image2 from './Image2.png'
 import Image4 from './Image4.png'
@@ -17,7 +18,9 @@ export default function App() {
   const [currentMemo, setCurrentMemo] = useState(null)
      // currentMemo is null when open the app
      // currentMemo is false when delete or close the memo.
-  const [editButtonClicked, clicked] = useState(false)
+  const [editButtonClicked, showInput] = useState(false)
+  const [settingButtonClicked, showContainer] = useState(false)
+  const [color, setColor] = useState("rgb(184, 231, 228)")
   const ref = React.useRef(null);
   
 
@@ -95,10 +98,20 @@ export default function App() {
     updateMemos(newMemos)
   }
 
+  const settingHandler = () => {
+    showContainer(true)
+  }
+
+  const colorHandler = selectedColor => {
+    setColor(selectedColor)
+    console.log("test", selectedColor )
+  }
+
   return ( 
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()} }>
       <View style={styles.container}>
-        <View style={styles.head}>      
+        <View style={[styles.head, {backgroundColor: color}]} >  
+         {/* combaned styles go to array*/}
           <ScrollView  ref={ref}
                       horizontal={true} 
                       keyboardShouldPersistTaps='always' 
@@ -113,7 +126,7 @@ export default function App() {
                                       }>
                       {editButtonClicked && currentMemo.key === memo.key ?                     
                           <TextInput autoFocus={true}
-                                    onEndEditing={()=> clicked(false)}
+                                    onEndEditing={()=> showInput(false)}
                                     onChangeText={text=>editTitle(text, memo)}
                                     placeholder="  type ...  " /> 
                           :
@@ -126,7 +139,7 @@ export default function App() {
                         <View style={styles.buttonContainer}>                                 
                             <FontAwesome  name="edit" size={25} 
                                           color="black" style={styles.button}
-                                          onPress={() => {clicked(true)
+                                          onPress={() => {showInput(true)
                                           }} />                                                       
                             <AntDesign  name="delete" size={25} color="black" 
                                         style={styles.button}
@@ -148,17 +161,25 @@ export default function App() {
           
         </View> 
         
-        <View style={styles.memoBodyContainer}>
+        <View style={[styles.memoBodyContainer, {backgroundColor: color}]}>
            {/* open app with only 1 memo - desplay it as current memo
             but if you have 2 memos and delete one of them, the last memo does not display as current, it will be false (not null) */}
           { memos.length === 1 && currentMemo === null || currentMemo && currentMemo !== false ? 
             <CurrentMemo memo = {memos.length === 1 && currentMemo === null ? memos[0] : currentMemo }
+                        color = {color}
                          edit={editMemoBody} />
             : <View>
-                <Image style={styles.image} source = {Image4}/> 
+                {settingButtonClicked? 
+                   <Themes colorChanger = {colorHandler}/> :
+                   <Image style={styles.image} source = {Image4}/> 
+                }
                 <View style={styles.lowerButtonContainer}>
-                  <Ionicons name="add" size={40} color="black" style={styles.addButton} onPress={addHandler}/>
-                  <Ionicons name="settings-outline" size={40} color="black"  style={styles.settingButton}/>
+                  <Ionicons name="add" size={40} color="black"
+                            style={styles.lowerButton}
+                            onPress={addHandler}/>
+                  <Ionicons name="settings-outline" size={40} color="black"
+                            style={styles.lowerButton}
+                            onPress = {settingHandler} />
                 </View>                         
               </View>
           }
@@ -177,7 +198,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     // backgroundColor: '#5F9EA0',
     // backgroundColor: "rgb(105, 190, 186)",
-    backgroundColor: "rgb(184, 231, 228)",
+    // backgroundColor: "rgb(184, 231, 228)",
     // alignItems: 'flex-end',
     justifyContent: 'center',
     paddingLeft: 10,
@@ -186,7 +207,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'lightgrey',
     borderWidth: 1,
-    borderColor: '#5F9EA0',
+    // borderColor: '#5F9EA0',
+    borderColor: 'grey',
     borderRadius: 7,
     flexDirection: 'column', 
     paddingRight: 7, 
@@ -207,7 +229,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white', 
     borderWidth: 1,
-    borderColor: '#5F9EA0',
+    // borderColor: '#5F9EA0',
+    borderColor: 'grey',
     borderRadius: 7,
     flexDirection: 'column', 
     paddingTop: 0,
@@ -230,27 +253,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  addButton: {
+  lowerButton: {
     // width: '100%',
     backgroundColor: 'lightgrey', 
     // backgroundColor: 'rgb(225, 250, 131)',
     paddingTop: 5,
     paddingLeft: 5, 
     borderWidth: 2,
-    borderColor: '#5F9EA0',
+    // borderColor: '#5F9EA0',
+    borderColor: 'grey',
     borderRadius: 7,
     alignSelf: 'center',
-    marginRight: 5,
-  },
-  settingButton: {
-    backgroundColor: 'lightgrey', 
-    paddingTop: 5,
-    paddingLeft: 5, 
-    borderWidth: 2,
-    borderColor: '#5F9EA0',
-    borderRadius: 7,
-    alignSelf: 'center',
-    marginLeft: 5,
+    margin: 7,
   },
   button: {
     padding: 3,
@@ -259,8 +273,9 @@ const styles = StyleSheet.create({
   memoBodyContainer: {
     flex: 1,
     borderWidth: 1,
-    borderColor: '#5F9EA0',
-    backgroundColor: 'rgb(184, 231, 228)',
+    // borderColor: '#5F9EA0',
+    borderColor: 'grey',
+    // backgroundColor: 'rgb(184, 231, 228)',
     // justifyContent: 'flex-start',
   }, 
   image: {

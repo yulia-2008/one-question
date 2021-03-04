@@ -1,19 +1,17 @@
 import React from 'react';
 import { StyleSheet, TextInput, ScrollView } from 'react-native';
-// import {AsyncStorage} from '@react-native-community/async-storage';
 
 export default function CurrentMemo(props) {
   
    
     return ( 
         
-        <ScrollView style={styles.currentMemoBodyContainer}>         
+        <ScrollView style={[styles.currentMemoBodyContainer, {borderColor: props.color}]}>         
            <TextInput style={styles.input} 
                       multiline = {true}
                       autoFocus={false}
                       onChangeText={text=>props.edit(text)}
                       value={props.memo.body}
-                        // placeholder={props.memo.body}
                       />  
         </ScrollView>                                               
     );
@@ -29,6 +27,7 @@ export default function CurrentMemo(props) {
       borderRightWidth: 10,
       borderTopWidth: 0,
       borderBottomWidth: 10,
-      borderColor: 'rgb(184, 231, 228)',
+      // borderColor: 'rgb(184, 231, 228)',
+     
     } 
   });
