@@ -177,9 +177,13 @@ export default function App() {
                   <Ionicons name="add" size={40} color="black"
                             style={styles.lowerButton}
                             onPress={addHandler}/>
+                  {settingButtonClicked? 
+                  <Ionicons name="arrow-back" size={40} color="black"
+                            style={styles.lowerButton} /> :          
                   <Ionicons name="settings-outline" size={40} color="black"
                             style={styles.lowerButton}
                             onPress = {settingHandler} />
+                  }          
                 </View>                         
               </View>
           }
