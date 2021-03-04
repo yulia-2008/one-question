@@ -16,7 +16,7 @@ export default function App() {
   const [memos, updateMemos] = useState([])
   const [currentMemo, setCurrentMemo] = useState(null)
      // currentMemo is null when open the app
-     // currentMemo is false when delete the memo ot click outside of memo.
+     // currentMemo is false when delete or close the memo.
   const [editButtonClicked, clicked] = useState(false)
   const ref = React.useRef(null);
   
@@ -51,7 +51,7 @@ export default function App() {
     // updateMemos(prev => { return [ ...prev, newMemo 
     //    ]}) 
     setCurrentMemo(newMemo) 
-    ref.current.scrollTo({x: 1, animated: true})
+    ref.current.scrollTo({x: 0, animated: true})
   }  
         
 
@@ -96,7 +96,7 @@ export default function App() {
   }
 
   return ( 
-    <TouchableWithoutFeedback onPress={()=>{setCurrentMemo(false), Keyboard.dismiss()} }>
+    <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()} }>
       <View style={styles.container}>
         <View style={styles.head}>      
           <ScrollView  ref={ref}
@@ -111,11 +111,11 @@ export default function App() {
                                         styles.currentTitleContainer :
                                         styles.titleContainer
                                       }>
-                      {editButtonClicked && currentMemo.key === memo.key ?
+                      {editButtonClicked && currentMemo.key === memo.key ?                     
                           <TextInput autoFocus={true}
                                     onEndEditing={()=> clicked(false)}
                                     onChangeText={text=>editTitle(text, memo)}
-                                    placeholder="  type ...  " />
+                                    placeholder="  type ...  " /> 
                           :
                           <Text style={styles.title}
                                 onPress={() => {setCurrentMemo(memo)} }>
@@ -123,15 +123,19 @@ export default function App() {
                       }  
 
                       {memos.length === 1 && currentMemo === null || currentMemo && currentMemo.key === memo.key ? 
-                        <View >                                 
+                        <View style={styles.buttonContainer}>                                 
                             <FontAwesome  name="edit" size={25} 
-                                          color="black" style={styles.editButton}
+                                          color="black" style={styles.button}
                                           onPress={() => {clicked(true)
                                           }} />                                                       
                             <AntDesign  name="delete" size={25} color="black" 
-                                        style={styles.deleteButton}
+                                        style={styles.button}
                                         onPress={() => {deleteHandler(memo)
                                         }}/>                           
+                            <AntDesign name="closesquareo" size={23} color="black"
+                                      style={styles.button}
+                                      onPress={() => { setCurrentMemo(false)
+                                       }} />
                         </View>
                         : null
                       }            
@@ -141,18 +145,22 @@ export default function App() {
             })}
           </ScrollView>
           
-          <TouchableOpacity style={styles.addButton} onPress={addHandler}>
-            <Ionicons name="add" size={40} color="black" />
-          </TouchableOpacity> 
+          
         </View> 
         
         <View style={styles.memoBodyContainer}>
            {/* open app with only 1 memo - desplay it as current memo
             but if you have 2 memos and delete one of them, the last memo does not display as current, it will be false (not null) */}
           { memos.length === 1 && currentMemo === null || currentMemo && currentMemo !== false ? 
-            <CurrentMemo memo = {memos.length === 1 && currentMemo === null ? memos[0] : currentMemo } 
+            <CurrentMemo memo = {memos.length === 1 && currentMemo === null ? memos[0] : currentMemo }
                          edit={editMemoBody} />
-            : <Image style={styles.image} source = {Image4}/>
+            : <View>
+                <Image style={styles.image} source = {Image4}/> 
+                <View style={styles.lowerButtonContainer}>
+                  <Ionicons name="add" size={40} color="black" style={styles.addButton} onPress={addHandler}/>
+                  <Ionicons name="settings-outline" size={40} color="black"  style={styles.settingButton}/>
+                </View>                         
+              </View>
           }
         </View>
       </View>
@@ -170,15 +178,17 @@ const styles = StyleSheet.create({
     // backgroundColor: '#5F9EA0',
     // backgroundColor: "rgb(105, 190, 186)",
     backgroundColor: "rgb(184, 231, 228)",
-    alignItems: 'flex-end',
+    // alignItems: 'flex-end',
     justifyContent: 'center',
+    paddingLeft: 10,
   },
   titleContainer: {
     flex: 1,
     backgroundColor: 'lightgrey',
     borderWidth: 1,
+    borderColor: '#5F9EA0',
     borderRadius: 7,
-    flexDirection: 'row', 
+    flexDirection: 'column', 
     paddingRight: 7, 
     paddingLeft: 10,
     paddingBottom: 7,
@@ -197,34 +207,61 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white', 
     borderWidth: 1,
+    borderColor: '#5F9EA0',
     borderRadius: 7,
-    flexDirection: 'row', 
-    padding: 5,
+    flexDirection: 'column', 
+    paddingTop: 0,
+    paddingRight: 5,
+    paddingLeft: 5,
+    paddingBottom: 0,
     marginTop: 5,
     alignItems: 'center',
   },
+  buttonContainer: {
+    width: '100%',
+    flex: 1,
+    flexDirection: 'row', 
+    justifyContent: 'space-around',
+    paddingTop: 5,
+  },
+  lowerButtonContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+
   addButton: {
-    borderColor: "black",
+    // width: '100%',
     backgroundColor: 'lightgrey', 
     // backgroundColor: 'rgb(225, 250, 131)',
-    padding: 0, 
+    paddingTop: 5,
+    paddingLeft: 5, 
     borderWidth: 2,
+    borderColor: '#5F9EA0',
     borderRadius: 7,
     alignSelf: 'center',
-    margin: 15,
+    marginRight: 5,
   },
-  editButton: {
-    paddingLeft: 10, 
-    paddingBottom: 3,
+  settingButton: {
+    backgroundColor: 'lightgrey', 
+    paddingTop: 5,
+    paddingLeft: 5, 
+    borderWidth: 2,
+    borderColor: '#5F9EA0',
+    borderRadius: 7,
+    alignSelf: 'center',
+    marginLeft: 5,
   },
-  deleteButton: {
-    paddingTop: 3,
-    paddingLeft: 7,
-  }, 
+  button: {
+    padding: 3,
+    alignSelf: 'center',
+  },
   memoBodyContainer: {
     flex: 1,
     borderWidth: 1,
+    borderColor: '#5F9EA0',
     backgroundColor: 'rgb(184, 231, 228)',
+    // justifyContent: 'flex-start',
   }, 
   image: {
     width: 300,
