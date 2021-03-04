@@ -14,6 +14,8 @@ export default function Themes(props) {
                     {key: 7, color: "grey"},
                     {key: 8, color: "white"},
                     {key: 9, color: "rgb(155, 155, 206)"},
+                    {key: 10, color: "rgb(205, 254, 188)"},
+                    {key: 11, color: "rgb(251, 125, 89)"},
     ]
     
    return ( 
