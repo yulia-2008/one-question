@@ -20,13 +20,13 @@ export default function App() {
      // currentMemo is false when delete or close the memo.
   const [editButtonClicked, showInput] = useState(false)
   const [settingButtonClicked, showContainer] = useState(false)
-  const [theme, setTheme] = useState("rgb(184, 231, 228)")
+  const [theme, setTheme] = useState("green")
   const ref = React.useRef(null);
   
 
   useEffect(() => {getData(), getTheme()}, [])
   useEffect(() => { AsyncStorage.setItem("storedMemos", JSON.stringify(memos))}, [memos, currentMemo])
-  useEffect(() => { AsyncStorage.setItem("storedTheme", theme)}, [theme])
+  // useEffect(() => { AsyncStorage.setItem("storedTheme", theme)}, [theme])
 
 
 // function getColor() {
@@ -35,10 +35,9 @@ export default function App() {
 
   let getTheme = async() => {
     let keys = await AsyncStorage.getAllKeys()
-    console.log('allkeys', keys)
-    if (keys.includes('storedTheme')){
+    if (keys.includes('storedTheme')){ 
        await AsyncStorage.getItem('storedTheme')
-      .then (data => {setTheme(data), console.log("data", data)
+      .then (data => {setTheme(data)
       })
     }
     else {
@@ -123,6 +122,7 @@ export default function App() {
 
   const themeHandler = selectedColor => {
     setTheme(selectedColor)
+    AsyncStorage.setItem("storedTheme", selectedColor)
   }
 
 
