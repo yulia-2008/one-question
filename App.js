@@ -26,12 +26,6 @@ export default function App() {
 
   useEffect(() => {getData(), getTheme()}, [])
   useEffect(() => { AsyncStorage.setItem("storedMemos", JSON.stringify(memos))}, [memos, currentMemo])
-  // useEffect(() => { AsyncStorage.setItem("storedTheme", theme)}, [theme])
-
-
-// function getColor() {
-//   return "rgb(184, 231, 228)"
-// }
 
   let getTheme = async() => {
     let keys = await AsyncStorage.getAllKeys()
@@ -228,6 +222,7 @@ const styles = StyleSheet.create({
     // alignItems: 'flex-end',
     justifyContent: 'center',
     paddingLeft: 10,
+    height: 75,
   },
   titleContainer: {
     flex: 1,
@@ -240,7 +235,7 @@ const styles = StyleSheet.create({
     paddingRight: 7, 
     paddingLeft: 10,
     paddingBottom: 7,
-    paddingTop: 7,
+    paddingTop: 5,
     marginTop: 15,
     marginBottom: 15,
     marginLeft: 12,
