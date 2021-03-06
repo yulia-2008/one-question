@@ -20,12 +20,35 @@ export default function App() {
      // currentMemo is false when delete or close the memo.
   const [editButtonClicked, showInput] = useState(false)
   const [settingButtonClicked, showContainer] = useState(false)
-  const [color, setColor] = useState("rgb(184, 231, 228)")
+  const [theme, setTheme] = useState("rgb(184, 231, 228)")
   const ref = React.useRef(null);
   
 
-  useEffect(() => {getData()}, [])
+  useEffect(() => {getData(), getTheme()}, [])
   useEffect(() => { AsyncStorage.setItem("storedMemos", JSON.stringify(memos))}, [memos, currentMemo])
+  useEffect(() => { AsyncStorage.setItem("storedTheme", theme)}, [theme])
+
+
+// function getColor() {
+//   return "rgb(184, 231, 228)"
+// }
+
+  let getTheme = async() => {
+    let keys = await AsyncStorage.getAllKeys()
+    console.log('allkeys', keys)
+    if (keys.includes('storedTheme')){
+       await AsyncStorage.getItem('storedTheme')
+      .then (data => {setTheme(data), console.log("data", data)
+      })
+    }
+    else {
+      setTheme("rgb(184, 231, 228)")
+    }
+  }
+    
+
+     
+  
 
   let getData = async () =>  {
     await AsyncStorage.getItem('storedMemos')
@@ -98,24 +121,21 @@ export default function App() {
     updateMemos(newMemos)
   }
 
-  const settingHandler = () => {
-    showContainer(true)
+  const themeHandler = selectedColor => {
+    setTheme(selectedColor)
   }
 
-  const colorHandler = selectedColor => {
-    setColor(selectedColor)
-    console.log("test", selectedColor )
-  }
 
   return ( 
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()} }>
       <View style={styles.container}>
-        <View style={[styles.head, {backgroundColor: color}]} >  
+        <View style={[styles.head, {backgroundColor: theme}]} >  
          {/* combaned styles go to array*/}
           <ScrollView  ref={ref}
                       horizontal={true} 
                       keyboardShouldPersistTaps='always' 
-                      persistentScrollbar= {true}>
+                      persistentScrollbar= {true} 
+                      >
             {memos.map(memo=> {
              return <TouchableOpacity key={memo.key}
                                       // open app with only 1 memo - desplay it as current memo 
@@ -156,36 +176,38 @@ export default function App() {
                     </TouchableOpacity>
                     
             })}
-          </ScrollView>
-          
-          
+          </ScrollView>          
         </View> 
         
-        <View style={[styles.memoBodyContainer, {backgroundColor: color}]}>
+        <View style={[styles.memoBodyContainer, {backgroundColor: theme}]}>
            {/* open app with only 1 memo - desplay it as current memo
             but if you have 2 memos and delete one of them, the last memo does not display as current, it will be false (not null) */}
           { memos.length === 1 && currentMemo === null || currentMemo && currentMemo !== false ? 
             <CurrentMemo memo = {memos.length === 1 && currentMemo === null ? memos[0] : currentMemo }
-                        color = {color}
-                         edit={editMemoBody} />
-            : <View>
-                {settingButtonClicked? 
-                   <Themes colorChanger = {colorHandler}/> :
-                   <Image style={styles.image} source = {Image4}/> 
-                }
-                <View style={styles.lowerButtonContainer}>
-                  <Ionicons name="add" size={40} color="black"
-                            style={styles.lowerButton}
-                            onPress={addHandler}/>
-                  {settingButtonClicked? 
-                  <Ionicons name="arrow-back" size={40} color="black"
-                            style={styles.lowerButton} /> :          
-                  <Ionicons name="settings-outline" size={40} color="black"
-                            style={styles.lowerButton}
-                            onPress = {settingHandler} />
-                  }          
-                </View>                         
-              </View>
+                         color = {theme}
+                         edit={editMemoBody} /> :
+            <View>
+                {settingButtonClicked ? 
+                  <> 
+                    <Themes colorChanger = {themeHandler}/>
+                    <Ionicons name="arrow-back" size={40} color="black" 
+                              style={styles.lowerButton} 
+                              onPress = {() =>  showContainer(false)}/>
+                  </>
+                  :
+                  <>
+                    <Image style={styles.image} source = {Image4}/> 
+                    <View style={styles.lowerButtonContainer}>
+                      <Ionicons name="add" size={40} color="black"
+                                style={styles.lowerButton}
+                                onPress={addHandler}/>
+                      <Ionicons name="settings-outline" size={40} color="black"
+                                style={styles.lowerButton}
+                                onPress = {() =>  showContainer(true)} />
+                    </View>          
+                  </>          
+                }                           
+            </View>
           }
         </View>
       </View>
@@ -276,9 +298,9 @@ const styles = StyleSheet.create({
   },
   memoBodyContainer: {
     flex: 1,
-    borderWidth: 1,
+    borderTopWidth: 1,
     // borderColor: '#5F9EA0',
-    borderColor: 'grey',
+    borderTopColor: 'grey',
     // backgroundColor: 'rgb(184, 231, 228)',
     // justifyContent: 'flex-start',
   }, 
