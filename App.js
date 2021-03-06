@@ -8,8 +8,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import CurrentMemo from './CurrentMemo.js';
 import Themes from './Themes.js';
 import AsyncStorage from '@react-native-community/async-storage';
-import Image2 from './Image2.png'
 import Image4 from './Image4.png'
+import Welcome from './Welcome.jpg'
 
 
 export default function App() {
@@ -21,6 +21,7 @@ export default function App() {
   const [editButtonClicked, showInput] = useState(false)
   const [settingButtonClicked, showContainer] = useState(false)
   const [theme, setTheme] = useState("green")
+  const [coordinate, setCoordinate] = useState([])
   const ref = React.useRef(null);
   
 
@@ -119,6 +120,11 @@ export default function App() {
     AsyncStorage.setItem("storedTheme", selectedColor)
   }
 
+  const openMemo = memo => {
+    setCurrentMemo(memo)
+    ref.current.scrollTo({x: coordinate[memo.key]-50, animated: true})
+  }
+
 
   return ( 
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()} }>
@@ -132,12 +138,20 @@ export default function App() {
                       >
             {memos.map(memo=> {
              return <TouchableOpacity key={memo.key}
-                                      // open app with only 1 memo - desplay it as current memo 
-                                      // but if you have 2 memos and delete one of them, the last memo does not display as current, it will be false (not null)
+                                      onPress={() => {openMemo(memo)} }
+                                      onLayout={(event) => {
+                                        const layout = event.nativeEvent.layout;
+                                        coordinate[memo.key] = layout.x;
+                                        setCoordinate(coordinate);
+                                        // set coordinate for each memo, so I can know where to scroll
+                                      }}                                      
                                       style={ memos.length === 1 && currentMemo === null || currentMemo && currentMemo.key === memo.key ?  
                                         styles.currentTitleContainer :
                                         styles.titleContainer
-                                      }>
+                                      // open app with only 1 memo - desplay it as current memo 
+                                      // but if you have 2 memos and delete one of them, the last memo does not display as current, it will be false (not null)
+                                      }> 
+
                       {editButtonClicked && currentMemo.key === memo.key ?                     
                           <TextInput autoFocus={true}
                                     onEndEditing={()=> showInput(false)}
@@ -145,10 +159,9 @@ export default function App() {
                                     placeholder="  type ...  " /> 
                           :
                           <Text style={styles.title}
-                                onPress={() => {setCurrentMemo(memo)} }>
+                               >
                                {memo.title} </Text>                   
                       }  
-
                       {memos.length === 1 && currentMemo === null || currentMemo && currentMemo.key === memo.key ? 
                         <View style={styles.buttonContainer}>                                 
                             <FontAwesome  name="edit" size={25} 
@@ -190,7 +203,8 @@ export default function App() {
                   </>
                   :
                   <>
-                    <Image style={styles.image} source = {Image4}/> 
+                    <Image style={styles.image} source = {Image4}/>                 
+                    <Image style={styles.welcome} source = {Welcome}/>                   
                     <View style={styles.lowerButtonContainer}>
                       <Ionicons name="add" size={40} color="black"
                                 style={styles.lowerButton}
@@ -216,19 +230,15 @@ const styles = StyleSheet.create({
   head: {
     marginTop: 30,
     flexDirection: 'row',
-    // backgroundColor: '#5F9EA0',
-    // backgroundColor: "rgb(105, 190, 186)",
-    // backgroundColor: "rgb(184, 231, 228)",
-    // alignItems: 'flex-end',
     justifyContent: 'center',
     paddingLeft: 10,
+    paddingRight: 10,
     height: 75,
   },
   titleContainer: {
     flex: 1,
     backgroundColor: 'lightgrey',
     borderWidth: 1,
-    // borderColor: '#5F9EA0',
     borderColor: 'grey',
     borderRadius: 7,
     flexDirection: 'column', 
@@ -243,14 +253,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontWeight: "bold",
+    // fontWeight: "bold",
     fontSize: 24,
   },
   currentTitleContainer:{
     flex: 1,
     backgroundColor: 'white', 
     borderWidth: 1,
-    // borderColor: '#5F9EA0',
     borderColor: 'grey',
     borderRadius: 7,
     flexDirection: 'column', 
@@ -275,13 +284,10 @@ const styles = StyleSheet.create({
   },
 
   lowerButton: {
-    // width: '100%',
     backgroundColor: 'lightgrey', 
-    // backgroundColor: 'rgb(225, 250, 131)',
     paddingTop: 5,
     paddingLeft: 5, 
     borderWidth: 2,
-    // borderColor: '#5F9EA0',
     borderColor: 'grey',
     borderRadius: 7,
     alignSelf: 'center',
@@ -294,16 +300,23 @@ const styles = StyleSheet.create({
   memoBodyContainer: {
     flex: 1,
     borderTopWidth: 1,
-    // borderColor: '#5F9EA0',
     borderTopColor: 'grey',
-    // backgroundColor: 'rgb(184, 231, 228)',
-    // justifyContent: 'flex-start',
   }, 
   image: {
     width: 300,
     height: 300,
     alignSelf: 'center',
     margin: 50,
+    position: 'relative',
+  },
+  welcome: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    marginTop: 100,
+    paddingRight: 30,
+    position: 'absolute',
+    transform: [{ rotate: "353deg" }]
   }
 });
 

@@ -22,7 +22,7 @@ export default function Themes(props) {
     
    return ( 
        <>
-        <Text style={{alignSelf: 'center', marginTop: 20,  fontWeight: "bold", fontSize: 15}}>Change Themes</Text>
+        <Text style={{alignSelf: 'center', marginTop: 20, fontSize: 15}}>Change Theme</Text>
         <FlatList 
             style={{alignSelf: 'center', margin: 12,}}
             data={colors}
