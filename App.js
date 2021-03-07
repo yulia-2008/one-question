@@ -22,7 +22,7 @@ export default function App() {
   const [settingButtonClicked, showContainer] = useState(false)
   const [theme, setTheme] = useState("green")
   const [coordinate, setCoordinate] = useState([])
-  const ref = React.useRef(null);
+  const ref = React.useRef(0);
   
 
   useEffect(() => {getData(), getTheme()}, [])
@@ -71,7 +71,7 @@ export default function App() {
     // updateMemos(prev => { return [ ...prev, newMemo 
     //    ]}) 
     setCurrentMemo(newMemo) 
-    ref.current.scrollTo({x: 0, animated: true})
+    ref.current.scrollTo({x: 0})
   }  
         
 
@@ -122,11 +122,12 @@ export default function App() {
 
   const openMemo = memo => {
     setCurrentMemo(memo)
-    ref.current.scrollTo({x: coordinate[memo.key]-50, animated: true})
+    ref.current.scrollTo({x: coordinate[memo.key-1]})
+    console.log("x",  coordinate[memo.key])
   }
 
 
-  return ( 
+  return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss()} }>
       <View style={styles.container}>
         <View style={[styles.head, {backgroundColor: theme}]} >  
@@ -142,7 +143,8 @@ export default function App() {
                                       onLayout={(event) => {
                                         const layout = event.nativeEvent.layout;
                                         coordinate[memo.key] = layout.x;
-                                        setCoordinate(coordinate);
+                                        // setCoordinate(coordinate);
+                                        // console.log('x:', layout.x);
                                         // set coordinate for each memo, so I can know where to scroll
                                       }}                                      
                                       style={ memos.length === 1 && currentMemo === null || currentMemo && currentMemo.key === memo.key ?  
